@@ -19,8 +19,8 @@ import java.util.Optional;
 public class TaskRepository {
 
     private static final String QUERY_FIND_SKILL_BY_ID =
-                    "FROM TaskDBDto as task "
-            +"where id = :id";
+            "FROM TaskDBDto as task "
+                    + "where id = :id";
     private static final String QUERY_FIND_ALL_SKILLS = "FROM TaskDBDto as task ";
 
 
@@ -40,7 +40,7 @@ public class TaskRepository {
         Session session = entityManager.unwrap(Session.class);
         Query<TaskDBDto> query = session.createQuery(QUERY_FIND_SKILL_BY_ID, TaskDBDto.class);
         query.setParameter("id", id);
-        
+
         TaskDBDto taskDBDto = query.getSingleResult();
 
         Optional<Task> optionalTask = taskDBMapper.mapToTask(taskDBDto);
@@ -54,5 +54,23 @@ public class TaskRepository {
 
         return taskDBMapper.mapToTasks(query.getResultList());
     }
+
+    public Integer save(Task task) {
+
+        Session session = entityManager.unwrap(Session.class);
+        Optional<TaskDBDto> optionalTaskToCreate = taskDBMapper.mapToDto(task);
+
+        if (optionalTaskToCreate.isPresent()) {
+            TaskDBDto taskToCreate = optionalTaskToCreate.get();
+            session.save(taskToCreate);
+
+            return taskDBMapper.mapToTask(taskToCreate).get().getId();
+        } else {
+            logger.debug("An optional task cannot be mapped : {}", optionalTaskToCreate);
+            //throw new CustomMappingException();
+            return 0;
+        }
+    }
+
 
 }

@@ -9,7 +9,7 @@ import java.util.Objects;
 @Table(name = "task")
 public class TaskDBDto {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column(name="name")
     private String name;

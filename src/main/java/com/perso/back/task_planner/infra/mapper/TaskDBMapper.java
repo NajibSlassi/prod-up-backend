@@ -30,8 +30,8 @@ public class TaskDBMapper {
         task.setName(dto.getName());
         task.setDueDate(dto.getDueDate());
         task.setEstimatedDateTimeMin(dto.getEstimatedDateTimeMin());
-        task.setPriority(priorityDBMapper.mapToPriority(dto.getPriorityDBDto()).get());
-        task.setState(stateDBMapper.mapToState(dto.getStateDBDto()).get());
+        task.setPriority(priorityDBMapper.mapToPriority(dto.getPriorityDBDto()).orElse(null));
+        task.setState(stateDBMapper.mapToState(dto.getStateDBDto()).orElse(null));
         task.setParentTask(mapToTask(dto.getParentTaskDBDto()).orElse(null));
 
         return Optional.of(task);
@@ -48,9 +48,9 @@ public class TaskDBMapper {
         dto.setName(task.getName());
         dto.setDueDate(task.getDueDate());
         dto.setEstimatedDateTimeMin(task.getEstimatedDateTimeMin());
-        dto.setPriorityDBDto(priorityDBMapper.mapToDto(task.getPriority()).get());
-        dto.setStateDBDto(stateDBMapper.mapToDto(task.getState()).get());
-        dto.setParentTaskDBDto(mapToDto(task.getParentTask()).get());
+        dto.setPriorityDBDto(priorityDBMapper.mapToDto(task.getPriority()).orElse(null));
+        dto.setStateDBDto(stateDBMapper.mapToDto(task.getState()).orElse(null));
+        dto.setParentTaskDBDto(mapToDto(task.getParentTask()).orElse(null));
 
         return Optional.of(dto);
     }

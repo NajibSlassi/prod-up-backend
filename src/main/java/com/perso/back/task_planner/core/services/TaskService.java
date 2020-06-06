@@ -4,6 +4,7 @@ import com.perso.back.task_planner.core.model.Task;
 import com.perso.back.task_planner.infra.repository.TaskRepository;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -27,8 +28,9 @@ public class TaskService {
         return taskRepository.getById(id);
     }
 
+    @Transactional
     public Integer create(Task task) {
-        return task.getId();
+        return taskRepository.save(task);
     }
 
     public void update(Task task) {
