@@ -19,9 +19,7 @@ public class TaskService {
 
 
     public List<Task> findAll(){
-        List list = new LinkedList<Task>();
-        list.add(new Task());
-        return list;
+        return taskRepository.getAll();
     }
 
 

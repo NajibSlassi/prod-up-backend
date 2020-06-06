@@ -5,6 +5,7 @@ import com.perso.back.task_planner.infra.dto.TaskDBDto;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class TaskDBMapper {
@@ -52,6 +53,18 @@ public class TaskDBMapper {
         dto.setParentTaskDBDto(mapToDto(task.getParentTask()).get());
 
         return Optional.of(dto);
+    }
+
+    public List<Task> mapToTasks(List<TaskDBDto> dtos) {
+        if (dtos == null) {
+            return new ArrayList<>();
+        }
+
+        return dtos.stream()
+                .map(taskDBDto -> mapToTask(taskDBDto).orElse(null))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+
     }
 }
 

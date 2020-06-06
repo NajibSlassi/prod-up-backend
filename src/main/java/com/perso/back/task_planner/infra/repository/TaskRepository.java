@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -20,6 +21,7 @@ public class TaskRepository {
     private static final String QUERY_FIND_SKILL_BY_ID =
                     "FROM TaskDBDto as task "
             +"where id = :id";
+    private static final String QUERY_FIND_ALL_SKILLS = "FROM TaskDBDto as task ";
 
 
     @PersistenceContext
@@ -44,6 +46,13 @@ public class TaskRepository {
         Optional<Task> optionalTask = taskDBMapper.mapToTask(taskDBDto);
         session.evict(taskDBDto);
         return optionalTask.get();
-
     }
+
+    public List<Task> getAll() {
+        Session session = entityManager.unwrap(Session.class);
+        Query<TaskDBDto> query = session.createQuery(QUERY_FIND_ALL_SKILLS, TaskDBDto.class);
+
+        return taskDBMapper.mapToTasks(query.getResultList());
+    }
+
 }
