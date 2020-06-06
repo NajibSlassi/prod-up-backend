@@ -27,7 +27,7 @@ CREATE TABLE `priority` (
   `name` varchar(10) DEFAULT NULL,
   `value` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -36,7 +36,7 @@ CREATE TABLE `priority` (
 
 LOCK TABLES `priority` WRITE;
 /*!40000 ALTER TABLE `priority` DISABLE KEYS */;
-INSERT INTO `priority` VALUES (1,'Very-high',1),(2,'High',2),(3,'Medium',3),(4,'Low',4),(5,'Very-low',5);
+INSERT INTO `priority` VALUES (6,'Very-High',1),(7,'High',2),(8,'Medium',3),(9,'Low',4),(10,'Very-Low',5);
 /*!40000 ALTER TABLE `priority` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -49,4 +49,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-05-24  4:05:17
+-- Dump completed on 2020-06-06 14:28:03

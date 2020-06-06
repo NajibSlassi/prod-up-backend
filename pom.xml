@@ -11,6 +11,11 @@
     <properties>
         <spring-boot-starter-web.version>2.3.0.RELEASE</spring-boot-starter-web.version>
         <guava.version>28.2-jre</guava.version>
+        <hibernate-core.version>5.4.0.Final</hibernate-core.version>
+        <mysql-connector-java.version>8.0.13</mysql-connector-java.version>
+        <spring-boot-starter-data-jpa.version>2.3.0.RELEASE</spring-boot-starter-data-jpa.version>
+
+
     </properties>
 
 
@@ -27,6 +32,27 @@
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${hibernate-core.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql-connector-java.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <version>${spring-boot-starter-data-jpa.version}</version>
+        </dependency>
+
+
 
     </dependencies>
 

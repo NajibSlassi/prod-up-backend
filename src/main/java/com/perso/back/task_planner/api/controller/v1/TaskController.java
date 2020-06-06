@@ -21,7 +21,7 @@ class TaskController {
     }
 
     @GetMapping(value = "/{id}")
-    public Task findById(@PathVariable("id") Integer id) {
+    public Task findById(@PathVariable("id") Integer id) throws Exception {
         return RestPreconditions.checkFound(service.getById(id));
     }
 
@@ -34,7 +34,7 @@ class TaskController {
 
     @PutMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void update(@PathVariable( "id" ) Long id, @RequestBody Task task) {
+    public void update(@PathVariable( "id" ) Long id, @RequestBody Task task) throws Exception {
         Preconditions.checkNotNull(task);
         Preconditions.checkNotNull(service.getById(task.getId()));
         service.update(task);

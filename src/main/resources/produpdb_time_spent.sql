@@ -30,7 +30,7 @@ CREATE TABLE `time_spent` (
   PRIMARY KEY (`id`),
   KEY `task_id` (`task_id`),
   CONSTRAINT `time_spent_ibfk_1` FOREIGN KEY (`task_id`) REFERENCES `task` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,6 +39,7 @@ CREATE TABLE `time_spent` (
 
 LOCK TABLES `time_spent` WRITE;
 /*!40000 ALTER TABLE `time_spent` DISABLE KEYS */;
+INSERT INTO `time_spent` VALUES (2,5,'2020-01-01 00:00:00','2020-01-02 00:00:00');
 /*!40000 ALTER TABLE `time_spent` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -51,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-05-24  4:05:17
+-- Dump completed on 2020-06-06 14:28:03
