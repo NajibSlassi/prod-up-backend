@@ -1,7 +1,9 @@
 package com.perso.back.task_planner.api.controller.v1;
 
 import com.google.common.base.Preconditions;
+import com.perso.back.task_planner.core.model.ScheduledTask;
 import com.perso.back.task_planner.core.model.Task;
+import com.perso.back.task_planner.core.services.ScheduledTaskService;
 import com.perso.back.task_planner.core.services.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,35 +12,35 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/tasks")
-class TaskController {
+@RequestMapping("/scheduledtasks")
+public class ScheduledTasksController {
     @Autowired
-    private TaskService service;
+    private ScheduledTaskService service;
 
     @GetMapping
     @CrossOrigin
-    public List<Task> findAll() {
+    public List<ScheduledTask> findAll() {
         return service.findAll();
     }
 
     @GetMapping(value = "/{id}")
-    public Task findById(@PathVariable("id") Integer id) throws Exception {
+    public ScheduledTask findById(@PathVariable("id") Integer id) throws Exception {
         return RestPreconditions.checkFound(service.getById(id));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Integer create(@RequestBody Task task) {
-        Preconditions.checkNotNull(task);
-        return service.create(task);
+    public Integer create(@RequestBody ScheduledTask scheduledTask) {
+        Preconditions.checkNotNull(scheduledTask);
+        return service.create(scheduledTask);
     }
 
     @PutMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void update(@PathVariable( "id" ) Long id, @RequestBody Task task) throws Exception {
-        Preconditions.checkNotNull(task);
-        Preconditions.checkNotNull(service.getById(task.getId()));
-        service.update(task);
+    public void update(@PathVariable( "id" ) Long id, @RequestBody ScheduledTask scheduledTask) throws Exception {
+        Preconditions.checkNotNull(scheduledTask);
+        Preconditions.checkNotNull(service.getById(scheduledTask.getId()));
+        service.update(scheduledTask);
     }
 
     @DeleteMapping(value = "/{id}")
@@ -48,3 +50,4 @@ class TaskController {
     }
 
 }
+

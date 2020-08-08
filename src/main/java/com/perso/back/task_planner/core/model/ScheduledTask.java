@@ -3,7 +3,7 @@ package com.perso.back.task_planner.core.model;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class TimeSpent {
+public class ScheduledTask {
     private Integer id;
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
@@ -45,11 +45,11 @@ public class TimeSpent {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        TimeSpent timeSpent = (TimeSpent) o;
-        return Objects.equals(id, timeSpent.id) &&
-                Objects.equals(startDateTime, timeSpent.startDateTime) &&
-                Objects.equals(endDateTime, timeSpent.endDateTime) &&
-                Objects.equals(task, timeSpent.task);
+        ScheduledTask scheduledTask = (ScheduledTask) o;
+        return Objects.equals(id, scheduledTask.id) &&
+                Objects.equals(startDateTime, scheduledTask.startDateTime) &&
+                Objects.equals(endDateTime, scheduledTask.endDateTime) &&
+                Objects.equals(task, scheduledTask.task);
     }
 
     @Override
