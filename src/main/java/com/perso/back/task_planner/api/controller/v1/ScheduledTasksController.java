@@ -30,6 +30,7 @@ public class ScheduledTasksController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @CrossOrigin
     public Integer create(@RequestBody ScheduledTask scheduledTask) {
         Preconditions.checkNotNull(scheduledTask);
         return service.create(scheduledTask);

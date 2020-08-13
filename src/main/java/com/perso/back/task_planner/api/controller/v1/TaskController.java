@@ -28,6 +28,7 @@ class TaskController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @CrossOrigin
     public Integer create(@RequestBody Task task) {
         Preconditions.checkNotNull(task);
         return service.create(task);
