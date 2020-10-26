@@ -44,6 +44,7 @@ class TaskController {
 
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @CrossOrigin
     public void delete(@PathVariable("id") Integer id) {
         service.deleteById(id);
     }

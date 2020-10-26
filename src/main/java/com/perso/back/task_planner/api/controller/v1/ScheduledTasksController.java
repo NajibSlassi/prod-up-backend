@@ -2,9 +2,7 @@ package com.perso.back.task_planner.api.controller.v1;
 
 import com.google.common.base.Preconditions;
 import com.perso.back.task_planner.core.model.ScheduledTask;
-import com.perso.back.task_planner.core.model.Task;
 import com.perso.back.task_planner.core.services.ScheduledTaskService;
-import com.perso.back.task_planner.core.services.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +36,7 @@ public class ScheduledTasksController {
 
     @PutMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @CrossOrigin
     public void update(@PathVariable( "id" ) Long id, @RequestBody ScheduledTask scheduledTask) throws Exception {
         Preconditions.checkNotNull(scheduledTask);
         Preconditions.checkNotNull(service.getById(scheduledTask.getId()));
@@ -46,6 +45,7 @@ public class ScheduledTasksController {
 
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @CrossOrigin
     public void delete(@PathVariable("id") Integer id) {
         service.deleteById(id);
     }
