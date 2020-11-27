@@ -1,9 +1,7 @@
 package com.perso.back.task_planner.core.services;
 
 import com.perso.back.task_planner.core.model.ScheduledTask;
-import com.perso.back.task_planner.core.model.Task;
 import com.perso.back.task_planner.infra.repository.ScheduledTaskRepository;
-import com.perso.back.task_planner.infra.repository.TaskRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;

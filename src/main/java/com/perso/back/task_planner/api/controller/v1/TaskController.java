@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/tasks")
-class TaskController {
+@RequestMapping("/v1/tasks")
+class   TaskController {
     @Autowired
     private TaskService service;
 

@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
-@Table(name = "time_spent")
+@Table(name = "scheduled_task")
 public class ScheduledTaskDBDto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

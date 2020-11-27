@@ -5,7 +5,6 @@ import com.perso.back.task_planner.infra.repository.TaskRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.LinkedList;
 import java.util.List;
 
 @Service

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/scheduledtasks")
+@RequestMapping("/v1/scheduledtasks")
 public class ScheduledTasksController {
     @Autowired
     private ScheduledTaskService service;
