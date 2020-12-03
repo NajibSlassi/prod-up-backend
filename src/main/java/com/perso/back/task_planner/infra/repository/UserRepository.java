@@ -1,6 +1,7 @@
 package com.perso.back.task_planner.infra.repository;
 
 import com.perso.back.task_planner.core.model.User;
+import com.perso.back.task_planner.infra.dto.Role;
 import com.perso.back.task_planner.infra.dto.UserDBDto;
 import com.perso.back.task_planner.infra.mapper.UserDBMapper;
 import org.hibernate.Session;
@@ -23,9 +24,9 @@ public class UserRepository {
             "FROM UserDBDto as user "
                     + "where id = :id";
 
-    private static final String QUERY_FIND_USER_BY_USERNAME =
+    private static final String QUERY_FIND_USER_BY_EMAIL =
             "FROM UserDBDto as user "
-                    + "where username = :username";
+                    + "where email = :email";
 
     @PersistenceContext
     private final EntityManager entityManager;
@@ -51,16 +52,22 @@ public class UserRepository {
         return optionalUser.get();
     }
 
-    public User getByUserName(String userName) {
+    public User getByEmail(String email) {
         Session session = entityManager.unwrap(Session.class);
-        Query<UserDBDto> query = session.createQuery(QUERY_FIND_USER_BY_USERNAME, UserDBDto.class);
-        query.setParameter("username", userName);
-
-        UserDBDto userDBDto = query.getSingleResult();
+        Query<UserDBDto> query = session.createQuery(QUERY_FIND_USER_BY_EMAIL, UserDBDto.class);
+        query.setParameter("email", email);
+        boolean doEvict = true;
+        UserDBDto userDBDto = null;
+        try {
+            userDBDto = query.getSingleResult();
+        } catch (NoResultException e) {
+            doEvict = false;
+        }
+        if (doEvict) session.evict(userDBDto);
 
         Optional<User> optionalUser = userDBMapper.mapToUser(userDBDto);
-        session.evict(userDBDto);
-        return optionalUser.get();
+
+        return optionalUser.orElse(null);
     }
 
     public Integer save(User user) {

@@ -17,10 +17,13 @@ public class UserDBMapper {
 
         User user = new User();
         user.setId(dto.getId());
-        user.setUsername(dto.getUsername());
-        user.setPassword(dto.getPassword());
         user.setFirstName(dto.getFirstName());
         user.setLastName(dto.getLastName());
+        user.setEmail(dto.getEmail());
+        user.setPassword(dto.getPassword());
+        user.setEnabled(dto.isEnabled());
+        user.setRoles(dto.getRoles());
+
 
         return Optional.of(user);
     }
@@ -33,11 +36,13 @@ public class UserDBMapper {
 
         UserDBDto dto = new UserDBDto();
         dto.setId(user.getId());
-        dto.setUsername(user.getUsername());
-        dto.setPassword(user.getPassword());
         dto.setFirstName(user.getFirstName());
         dto.setLastName(user.getLastName());
         dto.setEmail(user.getEmail());
+        dto.setPassword(user.getPassword());
+        dto.setEnabled(user.isEnabled());
+        dto.setRoles(user.getRoles());
+
 
         return Optional.of(dto);
     }

@@ -1,20 +1,17 @@
 package com.perso.back.task_planner.core.model;
 
-import com.perso.back.task_planner.enums.Role;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import com.perso.back.task_planner.infra.dto.Role;
 
 import java.util.*;
 
 public class User {
     private Integer id;
-    private String username;
-    private String password;
     private String firstName;
     private String lastName;
     private String email;
-    public String role = getUserRole().getRole().toString().toLowerCase();
-    private List<GrantedAuthority> authorities;
+    private String password;
+    private boolean enabled;
+    private Collection<Role> roles;
 
     public Integer getId() {
         return id;
@@ -22,22 +19,6 @@ public class User {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getFirstName() {
@@ -64,19 +45,28 @@ public class User {
         this.email = email;
     }
 
-    public Set<GrantedAuthority> getAuthorities() {
-        UserRole role = this.getUserRole();
-        Set<GrantedAuthority> authorities = new HashSet<>();
-        authorities.add(new SimpleGrantedAuthority(role.getRole().authority()));
-        return authorities;
+    public String getPassword() {
+        return password;
     }
 
-    public void setAuthorities(List<GrantedAuthority> authorities) {
-        this.authorities = authorities;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public UserRole getUserRole() {
-        return new UserRole(1, Role.ADMINISTRATOR);
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public Collection<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Collection<Role> roles) {
+        this.roles = roles;
     }
 
     @Override
@@ -84,28 +74,30 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(id, user.id) &&
-                Objects.equals(username, user.username) &&
-                Objects.equals(password, user.password) &&
+        return enabled == user.enabled &&
+                Objects.equals(id, user.id) &&
                 Objects.equals(firstName, user.firstName) &&
                 Objects.equals(lastName, user.lastName) &&
-                Objects.equals(email, user.email);
+                Objects.equals(email, user.email) &&
+                Objects.equals(password, user.password) &&
+                Objects.equals(roles, user.roles);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, password, firstName, lastName, email);
+        return Objects.hash(id, firstName, lastName, email, password, enabled, roles);
     }
 
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", userName='" + username + '\'' +
-                ", password='" + password + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", enabled=" + enabled +
+                ", roles=" + roles +
                 '}';
     }
 }

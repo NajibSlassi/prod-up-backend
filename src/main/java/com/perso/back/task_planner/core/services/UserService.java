@@ -5,7 +5,6 @@ import com.perso.back.task_planner.infra.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 
 @Service
 public class UserService {
@@ -22,7 +21,7 @@ public class UserService {
 
     @Transactional
     public User getByUserName(String userName) {
-        return userRepository.getByUserName(userName);
+        return userRepository.getByEmail(userName);
     }
 
     @Transactional
