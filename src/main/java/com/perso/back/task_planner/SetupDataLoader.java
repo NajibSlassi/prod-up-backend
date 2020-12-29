@@ -1,6 +1,9 @@
 package com.perso.back.task_planner;
 
 import com.perso.back.task_planner.core.model.User;
+import com.perso.back.task_planner.exception.CustomMappingException;
+import com.perso.back.task_planner.exception.UserConstraintViolationException;
+import com.perso.back.task_planner.exception.UserNotFoundException;
 import com.perso.back.task_planner.infra.dto.Privilege;
 import com.perso.back.task_planner.infra.dto.Role;
 import com.perso.back.task_planner.infra.repository.PrivilegeRepository;
@@ -43,9 +46,10 @@ public class SetupDataLoader implements
         if (alreadySetup)
             return;
 
-        User user = userRepository.getByEmail("najibslassi1996@gmail.com");
-
-        if (user == null) {
+        User user = null;
+        try {
+            user = userRepository.getByEmail("najibslassi1996@gmail.com");
+        } catch (UserNotFoundException e) {
             Privilege readPrivilege
                     = createPrivilegeIfNotFound("READ_PRIVILEGE");
             Privilege writePrivilege
@@ -60,11 +64,17 @@ public class SetupDataLoader implements
             user = new User();
             user.setFirstName("najib");
             user.setLastName("slassi");
-            user.setPassword(passwordEncoder.encode("test"));
             user.setEmail("najibslassi1996@gmail.com");
+            user.setPassword(passwordEncoder.encode("test"));
             user.setRoles(Arrays.asList(adminRole));
             user.setEnabled(true);
-            userRepository.save(user);
+            try {
+                userRepository.save(user);
+            } catch (CustomMappingException customMappingException) {
+                customMappingException.printStackTrace();
+            } catch (UserConstraintViolationException userConstraintViolationException) {
+                userConstraintViolationException.printStackTrace();
+            }
         }
         alreadySetup = true;
     }

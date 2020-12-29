@@ -1,10 +1,13 @@
 package com.perso.back.task_planner.infra.repository;
 
+import com.perso.back.task_planner.exception.CustomMappingException;
 import com.perso.back.task_planner.core.model.User;
-import com.perso.back.task_planner.infra.dto.Role;
+import com.perso.back.task_planner.exception.UserConstraintViolationException;
+import com.perso.back.task_planner.exception.UserNotFoundException;
 import com.perso.back.task_planner.infra.dto.UserDBDto;
 import com.perso.back.task_planner.infra.mapper.UserDBMapper;
 import org.hibernate.Session;
+import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,55 +43,62 @@ public class UserRepository {
     }
 
 
-    public User getById(Integer id) throws Exception {
+    public User getById(Integer id) throws UserNotFoundException {
         Session session = entityManager.unwrap(Session.class);
         Query<UserDBDto> query = session.createQuery(QUERY_FIND_USER_BY_ID, UserDBDto.class);
         query.setParameter("id", id);
 
-        UserDBDto userDBDto = query.getSingleResult();
+        UserDBDto userDBDto = null;
+        try {
+            userDBDto = query.getSingleResult();
+        } catch (NoResultException e) {
+            throw new UserNotFoundException();
+        }
 
         Optional<User> optionalUser = userDBMapper.mapToUser(userDBDto);
         session.evict(userDBDto);
         return optionalUser.get();
     }
 
-    public User getByEmail(String email) {
+    public User getByEmail(String email) throws UserNotFoundException {
         Session session = entityManager.unwrap(Session.class);
         Query<UserDBDto> query = session.createQuery(QUERY_FIND_USER_BY_EMAIL, UserDBDto.class);
         query.setParameter("email", email);
-        boolean doEvict = true;
         UserDBDto userDBDto = null;
         try {
             userDBDto = query.getSingleResult();
         } catch (NoResultException e) {
-            doEvict = false;
+            throw new UserNotFoundException();
         }
-        if (doEvict) session.evict(userDBDto);
 
         Optional<User> optionalUser = userDBMapper.mapToUser(userDBDto);
 
-        return optionalUser.orElse(null);
+        return optionalUser.get();
     }
 
-    public Integer save(User user) {
+    public Integer save(User user) throws CustomMappingException, UserConstraintViolationException {
 
         Session session = entityManager.unwrap(Session.class);
         Optional<UserDBDto> optionalUserToCreate = userDBMapper.mapToDto(user);
 
         if (optionalUserToCreate.isPresent()) {
             UserDBDto userToCreate = optionalUserToCreate.get();
-            session.save(userToCreate);
+            try {
+                session.save(userToCreate);
+            } catch (ConstraintViolationException e) {
+                session.clear();
+                throw new UserConstraintViolationException();
+            }
 
             return userDBMapper.mapToUser(userToCreate).get().getId();
         } else {
             logger.debug("An optional user cannot be mapped : {}", optionalUserToCreate);
-            //throw new CustomMappingException();
-            return 0;
+            throw new CustomMappingException();
         }
     }
 
 
-    public void update(User user) {
+    public void update(User user) throws CustomMappingException {
         Session session = entityManager.unwrap(Session.class);
         Optional<UserDBDto> optionalUserToUpdate = userDBMapper.mapToDto(user);
 
@@ -97,11 +107,11 @@ public class UserRepository {
             session.update(userToCreate);
         } else {
             logger.debug("An optional user cannot be mapped : {}", optionalUserToUpdate);
-            //throw new CustomMappingException();
+            throw new CustomMappingException();
         }
     }
 
-    public void delete(Integer id) {
+    public void delete(Integer id) throws UserNotFoundException {
         try {
             Session session = entityManager.unwrap(Session.class);
             Query<UserDBDto> queryGet = session.createQuery(QUERY_FIND_USER_BY_ID, UserDBDto.class);
@@ -109,7 +119,7 @@ public class UserRepository {
             UserDBDto userDBDto = queryGet.getSingleResult();
             session.delete(userDBDto);
         } catch (NoSuchElementException | NoResultException e) {
-            throw new NoSuchElementException();
+            throw new UserNotFoundException();
         }
 
     }

@@ -1,6 +1,7 @@
 package com.perso.back.task_planner.aop.security;
 
 import com.perso.back.task_planner.core.model.User;
+import com.perso.back.task_planner.exception.UserNotFoundException;
 import com.perso.back.task_planner.infra.dto.Privilege;
 import com.perso.back.task_planner.infra.dto.Role;
 import com.perso.back.task_planner.infra.repository.RoleRepository;
@@ -33,8 +34,10 @@ public class MyUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email)
             throws UsernameNotFoundException {
 
-        User user = userRepository.getByEmail(email);
-        if (user == null) {
+        User user = null;
+        try {
+            user = userRepository.getByEmail(email);
+        } catch (UserNotFoundException e) {
             return new org.springframework.security.core.userdetails.User(
                     " ", " ", true, true, true, true,
                     getAuthorities(Arrays.asList(

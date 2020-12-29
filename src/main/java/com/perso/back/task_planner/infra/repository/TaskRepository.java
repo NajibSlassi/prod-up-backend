@@ -1,9 +1,13 @@
 package com.perso.back.task_planner.infra.repository;
 
+import com.perso.back.task_planner.exception.CustomMappingException;
 import com.perso.back.task_planner.core.model.Task;
+import com.perso.back.task_planner.exception.TaskConstraintViolationException;
+import com.perso.back.task_planner.exception.TaskNotFoundException;
 import com.perso.back.task_planner.infra.dto.TaskDBDto;
 import com.perso.back.task_planner.infra.mapper.TaskDBMapper;
 import org.hibernate.Session;
+import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +31,7 @@ public class TaskRepository {
 
     @PersistenceContext
     private final EntityManager entityManager;
+
     private final TaskDBMapper taskDBMapper;
     private final Logger logger = LoggerFactory.getLogger(TaskRepository.class);
 
@@ -37,16 +42,21 @@ public class TaskRepository {
     }
 
 
-    public Task getById(Integer id) throws Exception {
+    public Task getById(Integer id) throws TaskNotFoundException {
         Session session = entityManager.unwrap(Session.class);
         Query<TaskDBDto> query = session.createQuery(QUERY_FIND_TASK_BY_ID, TaskDBDto.class);
         query.setParameter("id", id);
 
-        TaskDBDto taskDBDto = query.getSingleResult();
+        TaskDBDto taskDBDto = null;
+        try {
+            taskDBDto = query.getSingleResult();
+        } catch (NoResultException e) {
+            throw new TaskNotFoundException();
+        }
 
         Optional<Task> optionalTask = taskDBMapper.mapToTask(taskDBDto);
         session.evict(taskDBDto);
-        return optionalTask.get();
+        return optionalTask.orElseThrow(TaskNotFoundException::new);
     }
 
     public List<Task> getAll() {
@@ -56,46 +66,50 @@ public class TaskRepository {
         return taskDBMapper.mapToTasks(query.getResultList());
     }
 
-    public Integer save(Task task) {
+    public Integer save(Task task) throws TaskConstraintViolationException, CustomMappingException {
 
         Session session = entityManager.unwrap(Session.class);
         Optional<TaskDBDto> optionalTaskToCreate = taskDBMapper.mapToDto(task);
 
         if (optionalTaskToCreate.isPresent()) {
             TaskDBDto taskToCreate = optionalTaskToCreate.get();
-            session.save(taskToCreate);
+            try {
+                session.save(taskToCreate);
+            } catch (ConstraintViolationException e) {
+                session.clear();
+                throw new TaskConstraintViolationException();
+            }
 
             return taskDBMapper.mapToTask(taskToCreate).get().getId();
         } else {
             logger.debug("An optional task cannot be mapped : {}", optionalTaskToCreate);
-            //throw new CustomMappingException();
-            return 0;
+            throw new CustomMappingException();
         }
     }
 
 
-    public void update(Task task) {
+    public void update(Task task) throws CustomMappingException {
         Session session = entityManager.unwrap(Session.class);
         Optional<TaskDBDto> optionalTaskToUpdate = taskDBMapper.mapToDto(task);
 
         if (optionalTaskToUpdate.isPresent()) {
-            TaskDBDto taskToCreate = optionalTaskToUpdate.get();
-            session.update(taskToCreate);
+            TaskDBDto taskToUpdate = optionalTaskToUpdate.get();
+            session.update(taskToUpdate);
         } else {
             logger.debug("An optional task cannot be mapped : {}", optionalTaskToUpdate);
-            //throw new CustomMappingException();
+            throw new CustomMappingException();
         }
     }
 
-    public void delete(Integer id) {
+    public void delete(Integer id) throws TaskNotFoundException {
         try {
             Session session = entityManager.unwrap(Session.class);
             Query<TaskDBDto> queryGet = session.createQuery(QUERY_FIND_TASK_BY_ID, TaskDBDto.class);
             queryGet.setParameter("id", id);
             TaskDBDto taskDBDto = queryGet.getSingleResult();
             session.delete(taskDBDto);
-        } catch (NoSuchElementException | NoResultException e) {
-            throw new NoSuchElementException();
+        } catch (NoResultException e) {
+            throw new TaskNotFoundException();
         }
 
     }

@@ -1,6 +1,9 @@
 package com.perso.back.task_planner.core.services;
 
+import com.perso.back.task_planner.exception.CustomMappingException;
 import com.perso.back.task_planner.core.model.ScheduledTask;
+import com.perso.back.task_planner.exception.ScheduledTaskConstraintViolationException;
+import com.perso.back.task_planner.exception.ScheduledTaskNotFoundException;
 import com.perso.back.task_planner.infra.repository.ScheduledTaskRepository;
 import org.springframework.stereotype.Service;
 
@@ -23,22 +26,23 @@ public class ScheduledTaskService {
     }
 
 
-    public ScheduledTask getById(Integer id) throws Exception {
+    public ScheduledTask getById(Integer id) throws ScheduledTaskNotFoundException {
         return scheduledTaskRepository.getById(id);
     }
 
     @Transactional
-    public Integer create(ScheduledTask scheduledTask) {
+    public Integer create(ScheduledTask scheduledTask) throws CustomMappingException, ScheduledTaskConstraintViolationException {
         return scheduledTaskRepository.save(scheduledTask);
     }
 
     @Transactional
-    public void update(ScheduledTask scheduledTask) {
+    public void update(ScheduledTask scheduledTask) throws CustomMappingException, ScheduledTaskNotFoundException {
+        ScheduledTask persistedScheduledTask = getById(scheduledTask.getId());
         scheduledTaskRepository.update(scheduledTask);
     }
 
     @Transactional
-    public void deleteById(Integer id) {
+    public void deleteById(Integer id) throws ScheduledTaskNotFoundException {
         scheduledTaskRepository.delete(id);
     }
 }

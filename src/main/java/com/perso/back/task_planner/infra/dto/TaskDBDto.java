@@ -11,7 +11,7 @@ public class TaskDBDto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(name="name")
+    @Column(name="name", unique = true)
     private String name;
     @Column(name="estimated_time_min")
     private Integer estimatedDateTimeMin;

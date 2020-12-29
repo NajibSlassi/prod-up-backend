@@ -1,11 +1,13 @@
 package com.perso.back.task_planner.infra.repository;
 
+import com.perso.back.task_planner.exception.CustomMappingException;
 import com.perso.back.task_planner.core.model.ScheduledTask;
-import com.perso.back.task_planner.core.model.Task;
+import com.perso.back.task_planner.exception.ScheduledTaskNotFoundException;
+import com.perso.back.task_planner.exception.ScheduledTaskConstraintViolationException;
 import com.perso.back.task_planner.infra.dto.ScheduledTaskDBDto;
-import com.perso.back.task_planner.infra.dto.TaskDBDto;
 import com.perso.back.task_planner.infra.mapper.ScheduledTaskDBMapper;
 import org.hibernate.Session;
+import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,12 +41,17 @@ public class ScheduledTaskRepository {
     }
 
 
-    public ScheduledTask getById(Integer id) throws Exception {
+    public ScheduledTask getById(Integer id) throws ScheduledTaskNotFoundException {
         Session session = entityManager.unwrap(Session.class);
         Query<ScheduledTaskDBDto> query = session.createQuery(QUERY_FIND_SCHEDULED_TASK_BY_ID, ScheduledTaskDBDto.class);
         query.setParameter("id", id);
 
-        ScheduledTaskDBDto scheduledTaskDBDto = query.getSingleResult();
+        ScheduledTaskDBDto scheduledTaskDBDto = null;
+        try {
+            scheduledTaskDBDto = query.getSingleResult();
+        } catch (NoResultException e) {
+            throw new ScheduledTaskNotFoundException();
+        }
 
         Optional<ScheduledTask> optionalScheduledTask = scheduledTaskDBMapper.mapToScheduledTask(scheduledTaskDBDto);
         session.evict(scheduledTaskDBDto);
@@ -58,38 +65,42 @@ public class ScheduledTaskRepository {
         return scheduledTaskDBMapper.mapToScheduledTasks(query.getResultList());
     }
 
-    public Integer save(ScheduledTask scheduledTask) {
+    public Integer save(ScheduledTask scheduledTask) throws CustomMappingException, ScheduledTaskConstraintViolationException {
 
         Session session = entityManager.unwrap(Session.class);
         Optional<ScheduledTaskDBDto> optionalScheduledTaskToCreate = scheduledTaskDBMapper.mapToDto(scheduledTask);
 
         if (optionalScheduledTaskToCreate.isPresent()) {
             ScheduledTaskDBDto scheduledTaskToCreate = optionalScheduledTaskToCreate.get();
-            session.save(scheduledTaskToCreate);
+            try {
+                session.save(scheduledTaskToCreate);
+            } catch (ConstraintViolationException e) {
+                session.clear();
+                throw new ScheduledTaskConstraintViolationException();
+            }
 
             return scheduledTaskDBMapper.mapToScheduledTask(scheduledTaskToCreate).get().getId();
         } else {
-            logger.debug("An optional task cannot be mapped : {}", optionalScheduledTaskToCreate);
-            //throw new CustomMappingException();
-            return 0;
+            logger.debug("An optional scheduled task cannot be mapped : {}", optionalScheduledTaskToCreate);
+            throw new CustomMappingException();
         }
     }
 
 
-    public void update(ScheduledTask scheduledTask) {
+    public void update(ScheduledTask scheduledTask) throws CustomMappingException {
         Session session = entityManager.unwrap(Session.class);
         Optional<ScheduledTaskDBDto> optionalScheduledTaskToUpdate = scheduledTaskDBMapper.mapToDto(scheduledTask);
 
         if (optionalScheduledTaskToUpdate.isPresent()) {
-            ScheduledTaskDBDto scheduledTaskToCreate = optionalScheduledTaskToUpdate.get();
-            session.update(scheduledTaskToCreate);
+            ScheduledTaskDBDto scheduledTaskToUpdate = optionalScheduledTaskToUpdate.get();
+            session.update(scheduledTaskToUpdate);
         } else {
             logger.debug("An optional task cannot be mapped : {}", optionalScheduledTaskToUpdate);
-            //throw new CustomMappingException();
+            throw new CustomMappingException();
         }
     }
 
-    public void delete(Integer id) {
+    public void delete(Integer id) throws ScheduledTaskNotFoundException {
         try {
             Session session = entityManager.unwrap(Session.class);
             Query<ScheduledTaskDBDto> queryGet = session.createQuery(QUERY_FIND_SCHEDULED_TASK_BY_ID, ScheduledTaskDBDto.class);
@@ -97,7 +108,7 @@ public class ScheduledTaskRepository {
             ScheduledTaskDBDto scheduledTaskDBDto = queryGet.getSingleResult();
             session.delete(scheduledTaskDBDto);
         } catch (NoSuchElementException | NoResultException e) {
-            throw new NoSuchElementException();
+            throw new ScheduledTaskNotFoundException();
         }
 
     }
