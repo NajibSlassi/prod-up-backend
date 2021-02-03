@@ -34,6 +34,7 @@ public class ScheduledTaskDBMapper {
 
         ScheduledTask scheduledTask = new ScheduledTask();
         scheduledTask.setId(dto.getId());
+        scheduledTask.setDescription(dto.getDescription());
         scheduledTask.setTask(taskDBMapper.mapToTask(dto.getTaskDBDto()).orElse(null));
         scheduledTask.setStartDateTime(dto.getStartDateTime());
         scheduledTask.setEndDateTime(dto.getEndDateTime());
@@ -49,6 +50,7 @@ public class ScheduledTaskDBMapper {
 
         ScheduledTaskDBDto dto = new ScheduledTaskDBDto();
         dto.setId(scheduledTask.getId());
+        dto.setDescription(scheduledTask.getDescription());
         dto.setTaskDBDto(taskDBMapper.mapToDto(scheduledTask.getTask()).orElse(null));
         dto.setStartDateTime(scheduledTask.getStartDateTime());
         dto.setEndDateTime(scheduledTask.getEndDateTime());

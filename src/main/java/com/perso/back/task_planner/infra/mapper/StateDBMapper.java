@@ -1,9 +1,7 @@
 package com.perso.back.task_planner.infra.mapper;
 
 import com.perso.back.task_planner.core.model.State;
-import com.perso.back.task_planner.core.model.Task;
 import com.perso.back.task_planner.infra.dto.StateDBDto;
-import com.perso.back.task_planner.infra.dto.TaskDBDto;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;

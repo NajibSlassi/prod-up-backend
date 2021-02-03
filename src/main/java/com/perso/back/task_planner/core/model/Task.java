@@ -10,7 +10,7 @@ public class Task {
     private Priority priority;
     private State state;
     private LocalDateTime dueDate;
-    private Task parentTask;
+    private Category category;
 
     public Integer getId() {
         return id;
@@ -60,12 +60,12 @@ public class Task {
         this.dueDate = dueDate;
     }
 
-    public Task getParentTask() {
-        return parentTask;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setParentTask(Task parentTask) {
-        this.parentTask = parentTask;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     @Override
@@ -79,12 +79,12 @@ public class Task {
                 Objects.equals(priority, task.priority) &&
                 Objects.equals(state, task.state) &&
                 Objects.equals(dueDate, task.dueDate) &&
-                Objects.equals(parentTask, task.parentTask);
+                Objects.equals(category, task.category);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, estimatedDateTimeMin, priority, state, dueDate, parentTask);
+        return Objects.hash(id, name, estimatedDateTimeMin, priority, state, dueDate, category);
     }
 
     @Override
@@ -96,7 +96,7 @@ public class Task {
                 ", priority=" + priority +
                 ", state=" + state +
                 ", dueDate=" + dueDate +
-                ", parentTask=" + parentTask +
+                ", taskCategory=" + category +
                 '}';
     }
 }

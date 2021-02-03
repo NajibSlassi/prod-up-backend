@@ -37,6 +37,7 @@ class   TaskController {
 
     @PutMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @CrossOrigin
     public void update(@PathVariable( "id" ) Long id, @RequestBody Task task) throws Exception {
         service.update(task);
     }

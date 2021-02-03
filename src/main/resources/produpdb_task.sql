@@ -24,12 +24,11 @@ DROP TABLE IF EXISTS `task`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `task` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(10) DEFAULT NULL,
+  `name` varchar(100) DEFAULT NULL,
   `estimated_time_min` int DEFAULT NULL,
   `priority_id` int DEFAULT NULL,
   `state_id` int DEFAULT NULL,
   `due_date` datetime DEFAULT NULL,
-  `parent_task_id` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `priority_id` (`priority_id`),
   KEY `state_id` (`state_id`),
@@ -44,7 +43,7 @@ CREATE TABLE `task` (
 
 LOCK TABLES `task` WRITE;
 /*!40000 ALTER TABLE `task` DISABLE KEYS */;
-INSERT INTO `task` VALUES (5,'Sleeping',480,6,7,'2020-01-01 00:00:00',NULL),(6,'Dreaming',3,6,7,'2020-01-01 00:00:00',5);
+INSERT INTO `task` VALUES (5,'Sleeping',480,6,7,'2020-01-01 00:00:00'),(6,'Dreaming',3,6,7,'2020-01-01 00:00:00');
 /*!40000 ALTER TABLE `task` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

@@ -17,7 +17,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 
@@ -74,6 +73,7 @@ public class TaskRepository {
         if (optionalTaskToCreate.isPresent()) {
             TaskDBDto taskToCreate = optionalTaskToCreate.get();
             try {
+
                 session.save(taskToCreate);
             } catch (ConstraintViolationException e) {
                 session.clear();

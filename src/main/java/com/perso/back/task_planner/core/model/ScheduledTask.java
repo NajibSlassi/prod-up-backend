@@ -5,6 +5,7 @@ import java.util.Objects;
 
 public class ScheduledTask {
     private Integer id;
+    private String description;
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
     private Task task;
@@ -15,6 +16,14 @@ public class ScheduledTask {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public LocalDateTime getStartDateTime() {
@@ -45,22 +54,25 @@ public class ScheduledTask {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ScheduledTask scheduledTask = (ScheduledTask) o;
-        return Objects.equals(id, scheduledTask.id) &&
-                Objects.equals(startDateTime, scheduledTask.startDateTime) &&
-                Objects.equals(endDateTime, scheduledTask.endDateTime) &&
-                Objects.equals(task, scheduledTask.task);
+        ScheduledTask that = (ScheduledTask) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(description, that.description) &&
+                Objects.equals(startDateTime, that.startDateTime) &&
+                Objects.equals(endDateTime, that.endDateTime) &&
+                Objects.equals(task, that.task);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, startDateTime, endDateTime, task);
+        return Objects.hash(id, description, startDateTime, endDateTime, task);
     }
 
     @Override
-    public String toString() {
-        return "TimeSpent{" +
+    public String
+    toString() {
+        return "ScheduledTask{" +
                 "id=" + id +
+                ", description='" + description + '\'' +
                 ", startDateTime=" + startDateTime +
                 ", endDateTime=" + endDateTime +
                 ", task=" + task +

@@ -15,6 +15,8 @@ public class ScheduledTaskDBDto {
     private Integer id;
     @Column(name="start_date_time")
     private LocalDateTime startDateTime;
+    @Column(name="description")
+    private String description;
     @Column(name="end_date_time")
     private LocalDateTime endDateTime;
     @OneToOne
@@ -27,6 +29,14 @@ public class ScheduledTaskDBDto {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public LocalDateTime getStartDateTime() {
@@ -60,13 +70,25 @@ public class ScheduledTaskDBDto {
         ScheduledTaskDBDto that = (ScheduledTaskDBDto) o;
         return Objects.equals(id, that.id) &&
                 Objects.equals(startDateTime, that.startDateTime) &&
+                Objects.equals(description, that.description) &&
                 Objects.equals(endDateTime, that.endDateTime) &&
                 Objects.equals(taskDBDto, that.taskDBDto);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, startDateTime, endDateTime, taskDBDto);
+        return Objects.hash(id, startDateTime, description, endDateTime, taskDBDto);
+    }
+
+    @Override
+    public String toString() {
+        return "ScheduledTaskDBDto{" +
+                "id=" + id +
+                ", startDateTime=" + startDateTime +
+                ", description='" + description + '\'' +
+                ", endDateTime=" + endDateTime +
+                ", taskDBDto=" + taskDBDto +
+                '}';
     }
 }
 
