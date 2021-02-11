@@ -1,5 +1,9 @@
 package com.perso.back.task_planner.api.controller.v1;
 
+import com.perso.back.task_planner.api.dto.ScheduledTaskApiDto;
+import com.perso.back.task_planner.api.mapper.ScheduledTaskApiMapper;
+import com.perso.back.task_planner.api.mapper.TaskApiMapper;
+import com.perso.back.task_planner.core.services.TaskService;
 import com.perso.back.task_planner.exception.CustomMappingException;
 import com.perso.back.task_planner.core.model.ScheduledTask;
 import com.perso.back.task_planner.core.services.ScheduledTaskService;
@@ -14,32 +18,39 @@ import java.util.List;
 @RestController
 @RequestMapping("/v1/scheduledtasks")
 public class ScheduledTasksController {
-    @Autowired
     private ScheduledTaskService service;
+    private ScheduledTaskApiMapper scheduledTaskApiMapper;
+
+    public ScheduledTasksController(ScheduledTaskApiMapper scheduledTaskApiMapper,
+                                    ScheduledTaskService service) {
+        this.scheduledTaskApiMapper = scheduledTaskApiMapper;
+        this.service = service;
+    }
 
     @GetMapping
     @CrossOrigin
-    public List<ScheduledTask> findAll() {
-        return service.findAll();
+    public List<ScheduledTaskApiDto> findAll(@RequestParam Integer userId) {
+
+        return scheduledTaskApiMapper.mapToDtos(service.findAll(userId));
     }
 
     @GetMapping(value = "/{id}")
-    public ScheduledTask findById(@PathVariable("id") Integer id) throws ScheduledTaskNotFoundException {
-        return service.getById(id);
+    public ScheduledTaskApiDto findById(@PathVariable("id") Integer id) throws ScheduledTaskNotFoundException {
+        return scheduledTaskApiMapper.mapToDto(service.getById(id)).orElse(null);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @CrossOrigin
-    public Integer create(@RequestBody ScheduledTask scheduledTask) throws CustomMappingException, ScheduledTaskConstraintViolationException {
-        return service.create(scheduledTask);
+    public Integer create(@RequestBody ScheduledTaskApiDto scheduledTaskApiDto) throws CustomMappingException, ScheduledTaskConstraintViolationException {
+        return service.create(scheduledTaskApiMapper.mapToScheduledTask(scheduledTaskApiDto).orElse(null));
     }
 
     @PutMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
     @CrossOrigin
-    public void update(@PathVariable( "id" ) Long id, @RequestBody ScheduledTask scheduledTask) throws Exception {
-        service.update(scheduledTask);
+    public void update(@PathVariable( "id" ) Long id, @RequestBody ScheduledTaskApiDto scheduledTaskApiDto) throws Exception {
+        service.update(scheduledTaskApiMapper.mapToScheduledTask(scheduledTaskApiDto).orElse(null));
     }
 
     @DeleteMapping(value = "/{id}")

@@ -5,7 +5,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "category")
-public class TaskCategoryDBDto {
+public class CategoryDBDto {
     @Id
     @GeneratedValue
     private Integer id;
@@ -32,7 +32,7 @@ public class TaskCategoryDBDto {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        TaskCategoryDBDto that = (TaskCategoryDBDto) o;
+        CategoryDBDto that = (CategoryDBDto) o;
         return Objects.equals(id, that.id) &&
                 Objects.equals(name, that.name);
     }

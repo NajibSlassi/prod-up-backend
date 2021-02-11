@@ -27,7 +27,8 @@ public class ScheduledTaskRepository {
     private static final String QUERY_FIND_SCHEDULED_TASK_BY_ID =
             "FROM ScheduledTaskDBDto as ScheduledTask "
                     + "where id = :id";
-    private static final String QUERY_FIND_ALL_SCHEDULED_TASKS = "FROM ScheduledTaskDBDto as task ";
+    private static final String QUERY_FIND_ALL_SCHEDULED_TASKS = "FROM ScheduledTaskDBDto as task "
+            + "where task.taskDBDto.userDBDto.id = :userId";
 
     @PersistenceContext
     private final EntityManager entityManager;
@@ -58,9 +59,10 @@ public class ScheduledTaskRepository {
         return optionalScheduledTask.get();
     }
 
-    public List<ScheduledTask> getAll() {
+    public List<ScheduledTask> getAll(Integer userId) {
         Session session = entityManager.unwrap(Session.class);
         Query<ScheduledTaskDBDto> query = session.createQuery(QUERY_FIND_ALL_SCHEDULED_TASKS, ScheduledTaskDBDto.class);
+        query.setParameter("userId", userId);
 
         return scheduledTaskDBMapper.mapToScheduledTasks(query.getResultList());
     }

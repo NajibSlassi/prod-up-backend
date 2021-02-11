@@ -21,8 +21,8 @@ public class TaskService {
     }
 
 
-    public List<Task> findAll(){
-        return taskRepository.getAll();
+    public List<Task> findAll(Integer userId){
+        return taskRepository.getAll(userId);
     }
 
 

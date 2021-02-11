@@ -25,7 +25,10 @@ public class TaskDBDto {
     private LocalDateTime dueDate;
     @OneToOne
     @JoinColumn(name = "category_id")
-    private TaskCategoryDBDto categoryDBDto ;
+    private CategoryDBDto categoryDBDto ;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private UserDBDto userDBDto ;
 
     public Integer getId() {
         return id;
@@ -75,12 +78,20 @@ public class TaskDBDto {
         this.dueDate = dueDate;
     }
 
-    public TaskCategoryDBDto getCategoryDBDto() {
+    public CategoryDBDto getCategoryDBDto() {
         return categoryDBDto;
     }
 
-    public void setCategoryDBDto(TaskCategoryDBDto categoryDBDto) {
+    public void setCategoryDBDto(CategoryDBDto categoryDBDto) {
         this.categoryDBDto = categoryDBDto;
+    }
+
+    public UserDBDto getUserDBDto() {
+        return userDBDto;
+    }
+
+    public void setUserDBDto(UserDBDto userDBDto) {
+        this.userDBDto = userDBDto;
     }
 
     @Override
@@ -94,12 +105,13 @@ public class TaskDBDto {
                 Objects.equals(priorityDBDto, taskDBDto.priorityDBDto) &&
                 Objects.equals(stateDBDto, taskDBDto.stateDBDto) &&
                 Objects.equals(dueDate, taskDBDto.dueDate) &&
-                Objects.equals(categoryDBDto, taskDBDto.categoryDBDto);
+                Objects.equals(categoryDBDto, taskDBDto.categoryDBDto) &&
+                Objects.equals(userDBDto, taskDBDto.userDBDto);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, estimatedDateTimeMin, priorityDBDto, stateDBDto, dueDate, categoryDBDto);
+        return Objects.hash(id, name, estimatedDateTimeMin, priorityDBDto, stateDBDto, dueDate, categoryDBDto, userDBDto);
     }
 
     @Override
@@ -112,6 +124,7 @@ public class TaskDBDto {
                 ", stateDBDto=" + stateDBDto +
                 ", dueDate=" + dueDate +
                 ", categoryDBDto=" + categoryDBDto +
+                ", userDBDto=" + userDBDto +
                 '}';
     }
 }

@@ -31,21 +31,21 @@ public class MyUserDetailsService implements UserDetailsService {
     private RoleRepository roleRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String email)
+    public UserDetailsExtended loadUserByUsername(String email)
             throws UsernameNotFoundException {
 
         User user = null;
         try {
             user = userRepository.getByEmail(email);
         } catch (UserNotFoundException e) {
-            return new org.springframework.security.core.userdetails.User(
-                    " ", " ", true, true, true, true,
+            return new UserDetailsExtended(
+                    0, " ", " ", true, true, true, true,
                     getAuthorities(Arrays.asList(
                             roleRepository.getByName("ROLE_USER"))));
         }
 
-        return new org.springframework.security.core.userdetails.User(
-                user.getEmail(), user.getPassword(), user.isEnabled(), true, true,
+        return new UserDetailsExtended(
+               user.getId(), user.getEmail(), user.getPassword(), user.isEnabled(), true, true,
                 true, getAuthorities(user.getRoles()));
     }
 

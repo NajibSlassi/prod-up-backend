@@ -21,8 +21,8 @@ public class ScheduledTaskService {
     }
 
 
-    public List<ScheduledTask> findAll(){
-        return scheduledTaskRepository.getAll();
+    public List<ScheduledTask> findAll(Integer userId){
+        return scheduledTaskRepository.getAll(userId);
     }
 
 

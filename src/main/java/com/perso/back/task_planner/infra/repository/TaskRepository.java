@@ -26,7 +26,8 @@ public class TaskRepository {
     private static final String QUERY_FIND_TASK_BY_ID =
             "FROM TaskDBDto as task "
                     + "where id = :id";
-    private static final String QUERY_FIND_ALL_TASKS = "FROM TaskDBDto as task ";
+    private static final String QUERY_FIND_ALL_TASKS = "FROM TaskDBDto as task "
+            + "where task.userDBDto.id = :userId";
 
     @PersistenceContext
     private final EntityManager entityManager;
@@ -58,9 +59,10 @@ public class TaskRepository {
         return optionalTask.orElseThrow(TaskNotFoundException::new);
     }
 
-    public List<Task> getAll() {
+    public List<Task> getAll(Integer userId) {
         Session session = entityManager.unwrap(Session.class);
         Query<TaskDBDto> query = session.createQuery(QUERY_FIND_ALL_TASKS, TaskDBDto.class);
+        query.setParameter("userId", userId);
 
         return taskDBMapper.mapToTasks(query.getResultList());
     }

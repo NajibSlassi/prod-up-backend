@@ -1,27 +1,17 @@
-
-package com.perso.back.task_planner.infra.dto;
+package com.perso.back.task_planner.api.dto;
 
 import com.perso.back.task_planner.core.model.Task;
+import com.perso.back.task_planner.infra.dto.TaskDBDto;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-@Entity
-@Table(name = "scheduled_task")
-public class ScheduledTaskDBDto {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ScheduledTaskApiDto {
     private Integer id;
-    @Column(name="start_date_time")
-    private LocalDateTime startDateTime;
-    @Column(name="description")
     private String description;
-    @Column(name="end_date_time")
+    private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "task_id")
-    private TaskDBDto taskDBDto;
+    private TaskApiDto taskApiDto;
 
     public Integer getId() {
         return id;
@@ -55,40 +45,39 @@ public class ScheduledTaskDBDto {
         this.endDateTime = endDateTime;
     }
 
-    public TaskDBDto getTaskDBDto() {
-        return taskDBDto;
+    public TaskApiDto getTaskApiDto() {
+        return taskApiDto;
     }
 
-    public void setTaskDBDto(TaskDBDto taskDBDto) {
-        this.taskDBDto = taskDBDto;
+    public void setTaskApiDto(TaskApiDto taskApiDto) {
+        this.taskApiDto = taskApiDto;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ScheduledTaskDBDto that = (ScheduledTaskDBDto) o;
+        ScheduledTaskApiDto that = (ScheduledTaskApiDto) o;
         return Objects.equals(id, that.id) &&
-                Objects.equals(startDateTime, that.startDateTime) &&
                 Objects.equals(description, that.description) &&
+                Objects.equals(startDateTime, that.startDateTime) &&
                 Objects.equals(endDateTime, that.endDateTime) &&
-                Objects.equals(taskDBDto, that.taskDBDto);
+                Objects.equals(taskApiDto, that.taskApiDto);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, startDateTime, description, endDateTime, taskDBDto);
+        return Objects.hash(id, description, startDateTime, endDateTime, taskApiDto);
     }
 
     @Override
     public String toString() {
-        return "ScheduledTaskDBDto{" +
+        return "ScheduledTaskApiDto{" +
                 "id=" + id +
-                ", startDateTime=" + startDateTime +
                 ", description='" + description + '\'' +
+                ", startDateTime=" + startDateTime +
                 ", endDateTime=" + endDateTime +
-                ", taskDBDto=" + taskDBDto +
+                ", taskApiDto=" + taskApiDto +
                 '}';
     }
 }
-

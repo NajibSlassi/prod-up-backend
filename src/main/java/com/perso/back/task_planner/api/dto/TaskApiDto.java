@@ -1,9 +1,13 @@
-package com.perso.back.task_planner.core.model;
+package com.perso.back.task_planner.api.dto;
+
+import com.perso.back.task_planner.core.model.Category;
+import com.perso.back.task_planner.core.model.Priority;
+import com.perso.back.task_planner.core.model.State;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class Task {
+public class TaskApiDto {
     private Integer id;
     private String name;
     private Integer estimatedDateTimeMin;
@@ -11,7 +15,7 @@ public class Task {
     private State state;
     private LocalDateTime dueDate;
     private Category category;
-    private User user;
+    private UserApiDto userApiDto;
 
     public Integer getId() {
         return id;
@@ -69,37 +73,37 @@ public class Task {
         this.category = category;
     }
 
-    public User getUser() {
-        return user;
+    public UserApiDto getUserApiDto() {
+        return userApiDto;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserApiDto(UserApiDto userApiDto) {
+        this.userApiDto = userApiDto;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Task task = (Task) o;
-        return Objects.equals(id, task.id) &&
-                Objects.equals(name, task.name) &&
-                Objects.equals(estimatedDateTimeMin, task.estimatedDateTimeMin) &&
-                Objects.equals(priority, task.priority) &&
-                Objects.equals(state, task.state) &&
-                Objects.equals(dueDate, task.dueDate) &&
-                Objects.equals(category, task.category) &&
-                Objects.equals(user, task.user);
+        TaskApiDto that = (TaskApiDto) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(estimatedDateTimeMin, that.estimatedDateTimeMin) &&
+                Objects.equals(priority, that.priority) &&
+                Objects.equals(state, that.state) &&
+                Objects.equals(dueDate, that.dueDate) &&
+                Objects.equals(category, that.category) &&
+                Objects.equals(userApiDto, that.userApiDto);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, estimatedDateTimeMin, priority, state, dueDate, category, user);
+        return Objects.hash(id, name, estimatedDateTimeMin, priority, state, dueDate, category, userApiDto);
     }
 
     @Override
     public String toString() {
-        return "Task{" +
+        return "TaskApiDto{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", estimatedDateTimeMin=" + estimatedDateTimeMin +
@@ -107,7 +111,7 @@ public class Task {
                 ", state=" + state +
                 ", dueDate=" + dueDate +
                 ", category=" + category +
-                ", user=" + user +
+                ", userApiDto=" + userApiDto +
                 '}';
     }
 }

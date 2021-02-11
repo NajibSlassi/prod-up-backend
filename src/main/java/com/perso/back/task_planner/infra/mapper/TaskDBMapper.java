@@ -1,6 +1,7 @@
 package com.perso.back.task_planner.infra.mapper;
 
 import com.perso.back.task_planner.core.model.Task;
+import com.perso.back.task_planner.core.model.User;
 import com.perso.back.task_planner.infra.dto.TaskDBDto;
 import org.springframework.stereotype.Component;
 
@@ -13,12 +14,14 @@ public class TaskDBMapper {
     private StateDBMapper stateDBMapper;
     private PriorityDBMapper priorityDBMapper;
     private TaskCategoryDBMapper taskCategoryDBMapper;
+    private UserDBMapper userDBMapper;
 
     public TaskDBMapper(StateDBMapper stateDBMapper, PriorityDBMapper priorityDBMapper,
-                        TaskCategoryDBMapper taskCategoryDBMapper) {
+                        TaskCategoryDBMapper taskCategoryDBMapper, UserDBMapper userDBMapper) {
         this.stateDBMapper = stateDBMapper;
         this.priorityDBMapper = priorityDBMapper;
         this.taskCategoryDBMapper = taskCategoryDBMapper;
+        this.userDBMapper = userDBMapper;
     }
 
 
@@ -37,6 +40,7 @@ public class TaskDBMapper {
         task.setState(stateDBMapper.mapToState(dto.getStateDBDto()).orElse(null));
         task.setCategory(taskCategoryDBMapper.mapToTaskCategory(dto.getCategoryDBDto())
                 .orElse(null));
+        task.setUser(userDBMapper.mapToUser(dto.getUserDBDto()).orElse(null));
 
         return Optional.of(task);
     }
@@ -55,6 +59,7 @@ public class TaskDBMapper {
         dto.setPriorityDBDto(priorityDBMapper.mapToDto(task.getPriority()).orElse(null));
         dto.setStateDBDto(stateDBMapper.mapToDto(task.getState()).orElse(null));
         dto.setCategoryDBDto(taskCategoryDBMapper.mapToDto(task.getCategory()).orElse(null));
+        dto.setUserDBDto(userDBMapper.mapToDto(task.getUser()).orElse(null));
 
         return Optional.of(dto);
     }
