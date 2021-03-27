@@ -9,6 +9,7 @@ public class Task {
     private Integer estimatedDateTimeMin;
     private Priority priority;
     private State state;
+    private Integer order;
     private LocalDateTime dueDate;
     private Category category;
     private User user;
@@ -53,6 +54,14 @@ public class Task {
         this.state = state;
     }
 
+    public Integer getOrder() {
+        return order;
+    }
+
+    public void setOrder(Integer order) {
+        this.order = order;
+    }
+
     public LocalDateTime getDueDate() {
         return dueDate;
     }
@@ -87,6 +96,7 @@ public class Task {
                 Objects.equals(estimatedDateTimeMin, task.estimatedDateTimeMin) &&
                 Objects.equals(priority, task.priority) &&
                 Objects.equals(state, task.state) &&
+                Objects.equals(order, task.order) &&
                 Objects.equals(dueDate, task.dueDate) &&
                 Objects.equals(category, task.category) &&
                 Objects.equals(user, task.user);
@@ -94,7 +104,7 @@ public class Task {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, estimatedDateTimeMin, priority, state, dueDate, category, user);
+        return Objects.hash(id, name, estimatedDateTimeMin, priority, state, order, dueDate, category, user);
     }
 
     @Override
@@ -105,6 +115,7 @@ public class Task {
                 ", estimatedDateTimeMin=" + estimatedDateTimeMin +
                 ", priority=" + priority +
                 ", state=" + state +
+                ", order=" + order +
                 ", dueDate=" + dueDate +
                 ", category=" + category +
                 ", user=" + user +

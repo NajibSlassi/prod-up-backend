@@ -54,4 +54,11 @@ class   TaskController {
         service.deleteById(id);
     }
 
+    @PutMapping(value = "/order/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @CrossOrigin
+    public void updateOrder(@RequestParam Integer old_task_order, @RequestParam Integer new_task_order, @PathVariable("id") Integer id) throws TaskNotFoundException {
+        service.updateOrder(old_task_order, new_task_order, id);
+    }
+
 }

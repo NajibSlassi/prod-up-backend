@@ -36,6 +36,7 @@ public class TaskDBMapper {
         task.setName(dto.getName());
         task.setDueDate(dto.getDueDate());
         task.setEstimatedDateTimeMin(dto.getEstimatedDateTimeMin());
+        task.setOrder(dto.getOrder());
         task.setPriority(priorityDBMapper.mapToPriority(dto.getPriorityDBDto()).orElse(null));
         task.setState(stateDBMapper.mapToState(dto.getStateDBDto()).orElse(null));
         task.setCategory(taskCategoryDBMapper.mapToTaskCategory(dto.getCategoryDBDto())
@@ -58,6 +59,7 @@ public class TaskDBMapper {
         dto.setEstimatedDateTimeMin(task.getEstimatedDateTimeMin());
         dto.setPriorityDBDto(priorityDBMapper.mapToDto(task.getPriority()).orElse(null));
         dto.setStateDBDto(stateDBMapper.mapToDto(task.getState()).orElse(null));
+        dto.setOrder(task.getOrder());
         dto.setCategoryDBDto(taskCategoryDBMapper.mapToDto(task.getCategory()).orElse(null));
         dto.setUserDBDto(userDBMapper.mapToDto(task.getUser()).orElse(null));
 

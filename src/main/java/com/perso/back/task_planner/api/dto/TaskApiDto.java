@@ -13,6 +13,7 @@ public class TaskApiDto {
     private Integer estimatedDateTimeMin;
     private Priority priority;
     private State state;
+    private Integer order;
     private LocalDateTime dueDate;
     private Category category;
     private UserApiDto userApiDto;
@@ -81,6 +82,14 @@ public class TaskApiDto {
         this.userApiDto = userApiDto;
     }
 
+    public Integer getOrder() {
+        return order;
+    }
+
+    public void setOrder(Integer order) {
+        this.order = order;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -91,6 +100,7 @@ public class TaskApiDto {
                 Objects.equals(estimatedDateTimeMin, that.estimatedDateTimeMin) &&
                 Objects.equals(priority, that.priority) &&
                 Objects.equals(state, that.state) &&
+                Objects.equals(order, that.order) &&
                 Objects.equals(dueDate, that.dueDate) &&
                 Objects.equals(category, that.category) &&
                 Objects.equals(userApiDto, that.userApiDto);
@@ -98,7 +108,7 @@ public class TaskApiDto {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, estimatedDateTimeMin, priority, state, dueDate, category, userApiDto);
+        return Objects.hash(id, name, estimatedDateTimeMin, priority, state, order, dueDate, category, userApiDto);
     }
 
     @Override
@@ -109,6 +119,7 @@ public class TaskApiDto {
                 ", estimatedDateTimeMin=" + estimatedDateTimeMin +
                 ", priority=" + priority +
                 ", state=" + state +
+                ", order=" + order +
                 ", dueDate=" + dueDate +
                 ", category=" + category +
                 ", userApiDto=" + userApiDto +

@@ -4,6 +4,7 @@ import com.perso.back.task_planner.core.model.User;
 import com.perso.back.task_planner.exception.UserNotFoundException;
 import com.perso.back.task_planner.infra.dto.Privilege;
 import com.perso.back.task_planner.infra.dto.Role;
+import com.perso.back.task_planner.infra.dto.UserDBDto;
 import com.perso.back.task_planner.infra.repository.RoleRepository;
 import com.perso.back.task_planner.infra.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ public class MyUserDetailsService implements UserDetailsService {
     public UserDetailsExtended loadUserByUsername(String email)
             throws UsernameNotFoundException {
 
-        User user = null;
+        UserDBDto user = null;
         try {
             user = userRepository.getByEmail(email);
         } catch (UserNotFoundException e) {

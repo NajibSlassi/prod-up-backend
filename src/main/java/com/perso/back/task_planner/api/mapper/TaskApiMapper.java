@@ -38,6 +38,7 @@ public class TaskApiMapper {
         task.setEstimatedDateTimeMin(dto.getEstimatedDateTimeMin());
         task.setPriority(dto.getPriority());
         task.setState(dto.getState());
+        task.setOrder(dto.getOrder());
         task.setDueDate(dto.getDueDate());
         task.setCategory(dto.getCategory());
         task.setUser(userApiMapper.mapToUser(dto.getUserApiDto()).orElse(null));
@@ -63,6 +64,7 @@ public class TaskApiMapper {
         dto.setEstimatedDateTimeMin(task.getEstimatedDateTimeMin());
         dto.setPriority(task.getPriority());
         dto.setState(task.getState());
+        dto.setOrder(task.getOrder());
         dto.setDueDate(task.getDueDate());
         dto.setCategory(task.getCategory());
         dto.setUserApiDto(userApiMapper.mapToDto(task.getUser()).orElse(null));

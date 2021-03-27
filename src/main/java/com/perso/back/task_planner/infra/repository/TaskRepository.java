@@ -29,6 +29,14 @@ public class TaskRepository {
     private static final String QUERY_FIND_ALL_TASKS = "FROM TaskDBDto as task "
             + "where task.userDBDto.id = :userId";
 
+    private static final String QUERY_UPDATE_ORDER_1_LOW_TO_HIGH = "UPDATE TaskDBDto set task_order = task_order - 1 "  +
+            "WHERE task_order >= :old_task_order and task_order <= :new_task_order";
+    private static final String QUERY_UPDATE_ORDER_1_HIGH_TO_LOW = "UPDATE TaskDBDto set task_order = task_order + 1 "  +
+            "WHERE task_order <= :old_task_order and task_order >= :new_task_order";
+    private static final String QUERY_UPDATE_ORDER_2 = "UPDATE TaskDBDto set task_order = :new_task_order "  +
+            "WHERE id = :id";
+
+
     @PersistenceContext
     private final EntityManager entityManager;
 
@@ -113,6 +121,28 @@ public class TaskRepository {
         } catch (NoResultException e) {
             throw new TaskNotFoundException();
         }
-
     }
+
+    public void updateOrder(Integer old_task_order, Integer new_task_order, Integer id) throws TaskNotFoundException {
+        try {
+            Session session = entityManager.unwrap(Session.class);
+            Query<TaskDBDto> query1;
+            if(old_task_order > new_task_order){
+                query1 = session.createQuery(QUERY_UPDATE_ORDER_1_HIGH_TO_LOW);
+            }else{
+                query1 = session.createQuery(QUERY_UPDATE_ORDER_1_LOW_TO_HIGH);
+            }
+            query1.setParameter("old_task_order", old_task_order);
+            query1.setParameter("new_task_order", new_task_order);
+            query1.executeUpdate();
+            Query<TaskDBDto> query2 = session.createQuery(QUERY_UPDATE_ORDER_2);
+            query2.setParameter("id", id);
+            query2.setParameter("new_task_order", new_task_order);
+            query2.executeUpdate();
+        } catch (NoResultException e) {
+            throw new TaskNotFoundException();
+        }
+    }
+
+
 }

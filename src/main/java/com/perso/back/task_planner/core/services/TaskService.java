@@ -47,4 +47,9 @@ public class TaskService {
     public void deleteById(Integer id) throws TaskNotFoundException {
         taskRepository.delete(id);
     }
+
+    @Transactional
+    public void updateOrder(Integer old_task_order, Integer new_task_order, Integer id) throws TaskNotFoundException {
+        taskRepository.updateOrder(old_task_order, new_task_order, id);
+    }
 }

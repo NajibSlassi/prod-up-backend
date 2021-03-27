@@ -60,7 +60,7 @@ public class UserRepository {
         return optionalUser.get();
     }
 
-    public User getByEmail(String email) throws UserNotFoundException {
+    public UserDBDto getByEmail(String email) throws UserNotFoundException {
         Session session = entityManager.unwrap(Session.class);
         Query<UserDBDto> query = session.createQuery(QUERY_FIND_USER_BY_EMAIL, UserDBDto.class);
         query.setParameter("email", email);
@@ -71,9 +71,21 @@ public class UserRepository {
             throw new UserNotFoundException();
         }
 
-        Optional<User> optionalUser = userDBMapper.mapToUser(userDBDto);
+        return userDBDto;
+    }
 
-        return optionalUser.get();
+    public UserDBDto getUserDBDtoByEmail(String email) throws UserNotFoundException {
+        Session session = entityManager.unwrap(Session.class);
+        Query<UserDBDto> query = session.createQuery(QUERY_FIND_USER_BY_EMAIL, UserDBDto.class);
+        query.setParameter("email", email);
+        UserDBDto userDBDto = null;
+        try {
+            userDBDto = query.getSingleResult();
+        } catch (NoResultException e) {
+            throw new UserNotFoundException();
+        }
+
+        return userDBDto;
     }
 
     public Integer save(User user) throws CustomMappingException, UserConstraintViolationException {
@@ -97,18 +109,39 @@ public class UserRepository {
         }
     }
 
+    public Integer saveModel(User user) throws CustomMappingException, UserConstraintViolationException {
 
-    public void update(User user) throws CustomMappingException {
         Session session = entityManager.unwrap(Session.class);
-        Optional<UserDBDto> optionalUserToUpdate = userDBMapper.mapToDto(user);
+            try {
+                session.save(user);
+            } catch (ConstraintViolationException e) {
+                session.clear();
+                throw new UserConstraintViolationException();
+            }
 
-        if (optionalUserToUpdate.isPresent()) {
-            UserDBDto userToCreate = optionalUserToUpdate.get();
-            session.update(userToCreate);
-        } else {
-            logger.debug("An optional user cannot be mapped : {}", optionalUserToUpdate);
-            throw new CustomMappingException();
-        }
+            return user.getId();
+    }
+
+    //Added this because when mapping is used "found shared references to a collection" error appears because of role :(
+    public Integer saveDto(UserDBDto userDBDto) throws CustomMappingException, UserConstraintViolationException {
+
+        Session session = entityManager.unwrap(Session.class);
+
+
+            try {
+                session.save(userDBDto);
+            } catch (ConstraintViolationException e) {
+                session.clear();
+                throw new UserConstraintViolationException();
+            }
+
+            return userDBMapper.mapToUser(userDBDto).get().getId();
+    }
+
+
+    public void update(UserDBDto userDBDto) throws CustomMappingException {
+        Session session = entityManager.unwrap(Session.class);
+        session.update(userDBDto);
     }
 
     public void delete(Integer id) throws UserNotFoundException {

@@ -23,6 +23,8 @@ public class TaskDBDto {
     private StateDBDto stateDBDto;
     @Column(name="due_date")
     private LocalDateTime dueDate;
+    @Column(name="task_order")
+    private Integer order;
     @OneToOne
     @JoinColumn(name = "category_id")
     private CategoryDBDto categoryDBDto ;
@@ -94,6 +96,14 @@ public class TaskDBDto {
         this.userDBDto = userDBDto;
     }
 
+    public Integer getOrder() {
+        return order;
+    }
+
+    public void setOrder(Integer order) {
+        this.order = order;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -105,13 +115,14 @@ public class TaskDBDto {
                 Objects.equals(priorityDBDto, taskDBDto.priorityDBDto) &&
                 Objects.equals(stateDBDto, taskDBDto.stateDBDto) &&
                 Objects.equals(dueDate, taskDBDto.dueDate) &&
+                Objects.equals(order, taskDBDto.order) &&
                 Objects.equals(categoryDBDto, taskDBDto.categoryDBDto) &&
                 Objects.equals(userDBDto, taskDBDto.userDBDto);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, estimatedDateTimeMin, priorityDBDto, stateDBDto, dueDate, categoryDBDto, userDBDto);
+        return Objects.hash(id, name, estimatedDateTimeMin, priorityDBDto, stateDBDto, dueDate, order, categoryDBDto, userDBDto);
     }
 
     @Override
@@ -123,6 +134,7 @@ public class TaskDBDto {
                 ", priorityDBDto=" + priorityDBDto +
                 ", stateDBDto=" + stateDBDto +
                 ", dueDate=" + dueDate +
+                ", order=" + order +
                 ", categoryDBDto=" + categoryDBDto +
                 ", userDBDto=" + userDBDto +
                 '}';
